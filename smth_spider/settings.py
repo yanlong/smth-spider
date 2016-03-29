@@ -14,7 +14,8 @@ BOT_NAME = 'smth_spider'
 SPIDER_MODULES = ['smth_spider.spiders']
 NEWSPIDER_MODULE = 'smth_spider.spiders'
 
-MONGO_URI='mongodb://127.0.0.1:27017'
+#MONGO_URI='mongodb://127.0.0.1:27017'
+MONGO_URI='mongodb://127.0.0.1:8100'
 MONGO_DATABASE='smth'
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'smth_spider (+http://www.yourdomain.com)'
