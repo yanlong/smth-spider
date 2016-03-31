@@ -12,6 +12,8 @@ class SmthSpider(scrapy.spiders.CrawlSpider):
         'http://m.newsmth.net/board/CreditCard',
         'http://m.newsmth.net/board/CreditCard?p=2',
         'http://m.newsmth.net/board/CreditCard?p=3',
+        'http://m.newsmth.net/board/CreditCard?p=4',
+        'http://m.newsmth.net/board/CreditCard?p=5',
     )
 
     base_url='http://m.newsmth.net'
@@ -40,8 +42,9 @@ class SmthSpider(scrapy.spiders.CrawlSpider):
                 print user
                 yield {'id': user, 'content': content}
 
-
-
+        next_page = response.css('#m_main > div:nth-child(4) > form > a:nth-child(1)')
+        if next_page.css('::text').extract_first() == u'下页':
+            yield scrapy.Request(self.base_url+next_page.css('::attr(href)').extract_first(), callback=self.parse_post)
 
 
     def send_invitation(self, user):
