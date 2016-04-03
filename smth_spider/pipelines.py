@@ -8,6 +8,7 @@ import pymongo
 import os
 import time
 from scrapy.exceptions import DropItem
+from pprint import pprint
 
 class SmthSpiderPipeline(object):
     def process_item(self, item, spider):
@@ -49,8 +50,8 @@ class MongoPipeline(object):
         self.client.close()
 
     def process_item(self, item, spider):
-        # self.db[self.collection_name].insert(dict(item))
-        # print item
+        print '=================> ' ,item['id'], item['title'], item['content'] if 'content' in item else ''
+        # return item
         if not self.db[self.collection_name].find_one({'id':item['id']}):
             self.db[self.collection_name].insert_one(item)
             user=item['id']
