@@ -27,9 +27,9 @@ class SmthSpider(scrapy.spiders.CrawlSpider):
             title = p.css('div:nth-child(1) > a::text').extract_first()
             link = p.css('div:nth-child(1) > a::attr(href)').extract_first()
             author = p.css('div:nth-child(2) > a:nth-child(1)::text').extract_first()
-            if u'浦发' in title and (u'ae' in title or u'AE' in title):
+            if u'浦发' in title and (u'ae' in title or u'AE' in title) and u'群' not in title:
                 # print '=============>'+title, link, author
-                if u'求' in title and (u'链接' in title or u'推荐' in title or u'站内' in title):
+                if u'求' in title and any(kw in title for kw in (u'链接', u'推荐', u'站内', u'邀请', u'连接')):
                     if author != u'原帖已删除':
                         yield {'id': author, 'title': title}
                 yield  scrapy.Request(self.base_url+link, callback=self.parse_post)
