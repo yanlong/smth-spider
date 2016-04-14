@@ -27,7 +27,7 @@ class SmthSpider(scrapy.spiders.CrawlSpider):
             title = p.css('div:nth-child(1) > a::text').extract_first()
             link = p.css('div:nth-child(1) > a::attr(href)').extract_first()
             author = p.css('div:nth-child(2) > a:nth-child(1)::text').extract_first()
-            if u'浦发' in title and (u'ae' in title or u'AE' in title) and u'群' not in title:
+            if u'中信' not in title and (u'ae' in title or u'AE' in title) and u'群' not in title:
                 # print '=============>'+title, link, author
                 if u'求' in title and any(kw in title for kw in (u'链接', u'推荐', u'站内', u'邀请', u'连接')):
                     if author != u'原帖已删除':
@@ -46,9 +46,10 @@ class SmthSpider(scrapy.spiders.CrawlSpider):
                 # print '=============>'+title, user, content
                 yield {'id': user, 'content': content, 'title':title}
 
-        next_page = response.css('#m_main > div:nth-child(4) > form > a:nth-child(1)')
-        if next_page.css('::text').extract_first() == u'下页':
-            yield scrapy.Request(self.base_url+next_page.css('::attr(href)').extract_first(), callback=self.parse_post)
+        next_pages = response.css('#m_main > div:nth-child(4) > form > a')
+        for next_page in next_pages:
+            if next_page.css('::text').extract_first() == u'下页':
+                yield scrapy.Request(self.base_url+next_page.css('::attr(href)').extract_first(), callback=self.parse_post)
 
 
     # def send_invitation(self, user):
