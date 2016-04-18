@@ -9,6 +9,7 @@ import os
 import time
 from scrapy.exceptions import DropItem
 from pprint import pprint
+import datetime
 
 class SmthSpiderPipeline(object):
     def process_item(self, item, spider):
@@ -53,6 +54,7 @@ class MongoPipeline(object):
         print '=================> ' ,item['id'], item['title'], item['content'] if 'content' in item else ''
         # return item
         if not self.db[self.collection_name].find_one({'id':item['id']}):
+            item['created_at'] = datetime.datetime.now()
             self.db[self.collection_name].insert_one(item)
             user=item['id']
             os.system('bash smth_spider/spiders/send_invitation.sh '+user)
